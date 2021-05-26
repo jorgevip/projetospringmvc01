@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
 <head>
@@ -10,17 +11,16 @@
 <!-- Referencia para arquivos CSS -->
 <link rel="stylesheet" href="resources/css/bootstrap.min.css" />
 
-<!-- Estilo CSS para o jquery validate -->
-<style>
-	label.error {/*formata as mensagens de erro*/
-			color: #d9534f;	
+<!-- estilo CSS para o jquery validate -->
+<style>	
+	label.error { /* formatar as mensagens de erro do jquery validate */
+		color: #d9534f;
 	}
-	input.error {/*formata os campos com erro*/
-			border: 1px solid #d9534f;			
+	input.error { /* formatar os campos com erro do jquery validate */
+		border: 1px solid #d9534f;
 	}
-		
-	select.error {/*formata os campos com erro*/
-			border: 1px solid #d9534f;			
+	select.error { /* formatar os campos com erro do jquery validate */
+		border: 1px solid #d9534f;
 	}
 </style>
 
@@ -63,35 +63,51 @@
 			</p>
 		</nav>
 	</div>
+	
+	<c:if test="${not empty mensagem_sucesso}">
+		<!-- mensagem de sucesso -->
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+  			<strong>Sucesso!</strong> ${mensagem_sucesso}
+  			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	</c:if>
+	
+	<c:if test="${not empty mensagem_erro}">
+		<!-- mensagem de erro -->
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  			<strong>Erro!</strong> ${mensagem_erro}
+  			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	</c:if>
+	
 
 	<div class="container mt-4">
-		<h5>Cadastro de Funcionário</h5>
+		<h5>Atualização de Funcionário</h5>
 		<hr/>
 		
-		<form id="formcadastro" action="cadastrarFuncionario" method="post">
+		<form id="formedicao" action="atualizarFuncionario" method="post">
 		
 			<div class="row">
 			
 				<div class="col-md-4">
+				
+					<label>CPF: <strong>${dto.cpf}</strong></label>
+					<br/>	
+					<label>Matrícula: <strong>${dto.matricula}</strong></label>
+					<br/>
+					<br/>
+				
+					<!-- campo oculto -->
+					<form:input path="dto.idFuncionario" type="hidden"/>
 					
 					<label>Nome do Funcionário:</label>
-					<form:input path="dto.nome" name="nome" id="nome" type="text" class="form-control" placeholder="Ex: João da Silva"/>
+					<form:input path="dto.nome" name="nome" id="nome" type="text" 
+						class="form-control" placeholder="Ex: João da Silva"/>
 					<br/>
-					
-					<label>CPF:</label>
-					<form:input path="dto.cpf" name="cpf" id="cpf" type="text" class="form-control" placeholder="Ex: 123.456.789-00"/>
-					<br/>
-					
-					<label>Matrícula:</label>
-					<form:input path="dto.matricula" name="matricula" id="matricula" type="text" class="form-control" placeholder="Ex: 2021-0001"/>
-					<br/>
-
-				</div>
-				
-				<div class="col-md-4">
 					
 					<label>Data de Admissão:</label>
-					<form:input path="dto.dataadmissao" name="dataadmissao" id="dataadmissao" type="date" class="form-control"/>
+					<form:input path="dto.dataadmissao" name="dataadmissao" id="dataadmissao" 
+						type="date" class="form-control"/>
 					<br/>
 					
 					<label>Situação do Funcionário:</label>
@@ -99,82 +115,66 @@
 						<option value="">Escolha uma opção</option>
 						<form:options items="${situacoes}"/>
 					</form:select>
-					<br/>
+					<br/>		
 
 				</div>
-			
+							
 			</div>
 			
 			<div class="row">
 				<div class="col-md-4">
 				
 					<div class="d-grid gap-2">
-  						<button class="btn btn-success" type="submit">Realizar Cadastro</button>
+  						<button class="btn btn-success" type="submit">Salvar Alterações</button>
 					</div>
 				
 				</div>
 			</div>
 		
 		</form>
-		
-		<div class="mt-3">
-			<strong>${mensagem}</strong>
-		
-		</div>
-		
-		
+				
 	</div>
 
 	<!-- Referencia para arquivos JS -->
 	<script src="resources/js/bootstrap.min.js"></script>
 	
-	<!-- Referencia para o jquery -->
+	<!-- Referencia para o JQuery -->
 	<script src="resources/js/jquery-3.6.0.min.js"></script>
-
-	<script src="resources/js/jquery.maskedinput.min.js"></script>
 	
-	<!-- Referencia para o jquery validate -->
+	<!-- Referencia para o JQuery Masked Input -->
+	<script src="resources/js/jquery.maskedinput.min.js"></script>	
 	
+	<!-- Referencias para o JQuery validate -->
 	<script src="resources/js/jquery.validate.min.js"></script>
-	
 	<script src="resources/js/messages_pt_BR.min.js"></script>
-	
-	<script> 
-		$(document).ready(function(){
-		$("#cpf").mask("999.999.999-99");
-		$("#matricula").mask("9999-999");
-		
-		//aplicar validacao ao formulário
-		
-		$("#formcadastro").validate({
-			rules :{
-				"nome" :{
-					required : true,
-					minlength : 6,
-					maxlength :150	
-				},
-				
-				"cpf" :{
-					required : true	
-				},
-				
-				"matricula" :{
-					required : true
-				},
-				
-				"dataadmissao" :{
-					required : true
-				},
-				
-				"situacao" :{
-					required : true
+
+	<script>
+		//quando a página for carregada, faça..
+		$(document).ready(function(){ //page load, start..
+						
+			//aplicando validação ao formulário..
+			$("#formedicao").validate({
+				//regras de validação..
+				rules : {
+					"nome" : {
+						required : true,
+						minlength : 6,
+						maxlength : 150
+					},
+					"dataadmissao" : {
+						required : true
+					},
+					"situacao" : {
+						required : true
+					}
 				}
-			}
+			});
 			
 		})
-	})
-	</script>
+	</script>	
 
 </body>
 </html>
+
+
 
