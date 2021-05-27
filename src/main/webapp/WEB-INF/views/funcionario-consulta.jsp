@@ -135,7 +135,7 @@ select.error { /*formata os campos com erro*/
 						<td>${funcionario.situacao}</td>
 						<td>
 						<a href="/projetoSpringMVC01/funcionario-edicao?id=${funcionario.idFuncionario}"
-						   		onclick="return confirm('Deseja realmente excluir o(a) funcionário ${funcionario.nome}?');"
+						   		onclick="return confirm('Deseja editar o cadastro do(a) funcionário(a) ${funcionario.nome}?');"
 						   		class="btn btn-primary btn-sm">
 							Editar
 						</a> 
