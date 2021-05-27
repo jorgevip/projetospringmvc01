@@ -94,7 +94,7 @@ public class FuncionarioController {
 		ModelAndView modelAndView = new ModelAndView("funcionario-consulta");
 
 		try {
-			modelAndView.addObject("listagem_funcionarios", funcionarioRepository.findAll());			
+			modelAndView.addObject("listagem_funcionarios", funcionarioRepository.findAll());
 		}
 		catch(Exception e) {
 			modelAndView.addObject("mensagem_erro", "Ocorreu um erro: " + e.getMessage());

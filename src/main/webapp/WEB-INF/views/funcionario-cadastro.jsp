@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
 <head>
@@ -23,7 +24,6 @@
 			border: 1px solid #d9534f;			
 	}
 </style>
-
 </head>
 <body>
 
@@ -63,6 +63,22 @@
 			</p>
 		</nav>
 	</div>
+	
+		<c:if test="${not empty mensagem_sucesso}">
+		<!-- mensagem de sucesso -->
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+  			<strong>Sucesso!</strong> ${mensagem_sucesso}
+  			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	</c:if>
+	
+	<c:if test="${not empty mensagem_erro}">
+		<!-- mensagem de erro -->
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  			<strong>Erro!</strong> ${mensagem_erro}
+  			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	</c:if>
 
 	<div class="container mt-4">
 		<h5>Cadastro de Funcionário</h5>

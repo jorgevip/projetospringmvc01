@@ -2,6 +2,7 @@ package br.com.cotiinformatica.repositories;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -71,7 +72,7 @@ public class FuncionarioRepository implements IFuncionarioRepository {
 	@Override
 	public List<Funcionario> findAll() throws Exception {
 
-		String sql = "select * from funcionario";
+		String sql = "select * from funcionario order by nome";
 
 		List<Funcionario> lista = jdbcTemplate.query(sql, new RowMapper<Funcionario>() {
 
@@ -155,11 +156,11 @@ public class FuncionarioRepository implements IFuncionarioRepository {
 	}
 
 	@Override
-	public List<Funcionario> findBySituacao(SituacaoFuncionario situacao) throws Exception {
+	public List<Funcionario> findByDataAdmissao(Date dataInicio, Date dataFim) throws Exception {
 
-		String sql = "select * from funcionario where situacao = ?";
+		String sql = "select * from funcionario where dataadmissao between ? and ? order by dataadmissao";
 
-		Object[] params = { situacao };
+		Object[] params = { DateHelper.toString(dataInicio), DateHelper.toString(dataFim) };
 
 		List<Funcionario> lista = jdbcTemplate.query(sql, params, new RowMapper<Funcionario>() {
 
