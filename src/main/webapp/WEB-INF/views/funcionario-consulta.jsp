@@ -39,7 +39,7 @@ select.error { /*formata os campos com erro*/
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" href="/projetoSpringMVC01/">Página inicial</a></li>
+						aria-current="page" href="/projetoSpringMVC01/home">Página inicial</a></li>
 					<li class="nav-item dropdown"><a
 						class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
 						role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -57,6 +57,15 @@ select.error { /*formata os campos com erro*/
 									de Funcionários</a></li>
 						</ul></li>
 				</ul>
+				<form class="d-flex">
+					<span class="text-white mt-3" style="margin-right: 20px;">
+						${usuario_autenticado.nome} (${usuario_autenticado.email})
+					</span>
+					<a href="/projetoSpringMVC01/logout" class="btn btn-outline-secondary mt-2"
+						onclick="return confirm('Deseja realmente sair do sistema?')">
+						Sair do Sistema
+					</a>
+				</form>
 			</div>
 		</div>
 	</nav>

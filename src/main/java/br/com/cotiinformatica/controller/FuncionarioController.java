@@ -94,7 +94,7 @@ public class FuncionarioController {
 		ModelAndView modelAndView = new ModelAndView("funcionario-consulta");
 
 		try {
-			modelAndView.addObject("listagem_funcionarios", funcionarioRepository.findAll());
+			modelAndView.addObject("listagem_funcionarios", funcionarioRepository.findAll());			
 		}
 		catch(Exception e) {
 			modelAndView.addObject("mensagem_erro", "Ocorreu um erro: " + e.getMessage());
@@ -212,11 +212,15 @@ public class FuncionarioController {
 	}
 
 	@RequestMapping("/funcionario-relatorio")
-	public String relatorio() {
-		return "funcionario-relatorio";
+	public ModelAndView relatorio() {
+		
+		ModelAndView modelAndView = new ModelAndView("funcionario-relatorio");
+		modelAndView.addObject("dto", new FuncionarioConsultaDTO());
+		
+		return modelAndView;
 	}
 }
 
 
 
- 
+
