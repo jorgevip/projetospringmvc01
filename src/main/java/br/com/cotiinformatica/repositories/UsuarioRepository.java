@@ -25,7 +25,7 @@ public class UsuarioRepository implements IUsuarioRepository {
 	@Override
 	public void create(Usuario entity) throws Exception {
 
-		String sql = "insert into usuario(nome, email, senha, perfil) values(?,?,?,?)";
+		String sql = "insert into usuario(nome, email, senha, perfil) values(?,?,md5(?),?)";
 
 		Object[] params = { 
 				entity.getNome(),
@@ -41,7 +41,7 @@ public class UsuarioRepository implements IUsuarioRepository {
 	@Override
 	public void update(Usuario entity) throws Exception {
 
-		String sql = "update Usuario set nome = ?, email = ?, senha = ?, perfil = ? where idusuario = ?";
+		String sql = "update Usuario set nome = ?, email = ?, senha = md5(?), perfil = ? where idusuario = ?";
 
 		Object[] params = { 
 				entity.getNome(),
@@ -131,7 +131,7 @@ public class UsuarioRepository implements IUsuarioRepository {
 	@Override
 	public Usuario findByEmailAndSenha(String email, String senha) throws Exception {
 
-		String sql = "select * from usuario where email = ? and senha = ?";
+		String sql = "select * from usuario where email = ? and senha = md5(?)";
 
 		Object[] params = { email, senha };
 

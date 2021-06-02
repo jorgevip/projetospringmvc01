@@ -174,6 +174,19 @@ public class FuncionarioRepository implements IFuncionarioRepository {
 		return lista;
 	}
 
+	@Override
+	public Integer countBySituacao(SituacaoFuncionario situacao) throws Exception {
+
+		String sql = "select count(*) from funcionario where situacao = ?";
+
+		Object[] params = { situacao.toString() };
+				
+		//queryForObject -> utilizado para consultas que retornam apenas 1 campo
+		return jdbcTemplate.queryForObject(sql, params, Integer.class);
+
+	}
+	
+	
 	// método privado para fazer a leitura dos dados do funcionario
 	// em cada método de consulta do repositorio (RowMapper)
 	private Funcionario getFuncionario(ResultSet rs) throws SQLException {
@@ -189,5 +202,7 @@ public class FuncionarioRepository implements IFuncionarioRepository {
 
 		return funcionario;
 	}
+
+
 
 }

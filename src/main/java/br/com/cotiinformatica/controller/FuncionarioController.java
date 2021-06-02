@@ -1,6 +1,12 @@
 package br.com.cotiinformatica.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.OutputStream;
 import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,8 +18,10 @@ import br.com.cotiinformatica.dto.FuncionarioCadastroDTO;
 import br.com.cotiinformatica.dto.FuncionarioConsultaDTO;
 import br.com.cotiinformatica.dto.FuncionarioEdicaoDTO;
 import br.com.cotiinformatica.entities.Funcionario;
+import br.com.cotiinformatica.entities.Usuario;
 import br.com.cotiinformatica.enums.SituacaoFuncionario;
 import br.com.cotiinformatica.helpers.DateHelper;
+import br.com.cotiinformatica.reports.FuncionarioReport;
 import br.com.cotiinformatica.repositories.FuncionarioRepository;
 
 /*
@@ -216,6 +224,51 @@ public class FuncionarioController {
 		
 		ModelAndView modelAndView = new ModelAndView("funcionario-relatorio");
 		modelAndView.addObject("dto", new FuncionarioConsultaDTO());
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "gerarRelatorioFuncionarios", method = RequestMethod.POST)
+	public ModelAndView gerarRelatorioFuncionarios(FuncionarioConsultaDTO dto, 
+			HttpServletRequest request, HttpServletResponse response) {
+				
+		ModelAndView modelAndView = new ModelAndView("funcionario-relatorio");
+		modelAndView.addObject("dto", new FuncionarioConsultaDTO());
+		
+		try {
+			
+			//Capturando as datas enviados pelo formulário..
+			Date dataInicio = DateHelper.toDate(dto.getDataInicio());
+			Date dataFim = DateHelper.toDate(dto.getDataFim());
+			
+			//Obtendo o usuario autenticado no sistema..
+			Usuario usuario = (Usuario) request.getSession().getAttribute("usuario_autenticado");
+			
+			//consulta de funcionários..
+			List<Funcionario> funcionarios = funcionarioRepository.findByDataAdmissao(dataInicio, dataFim);
+			
+			//Gerando o relatorio..
+			FuncionarioReport report = new FuncionarioReport();
+			ByteArrayInputStream stream = report.generatePdfReport(dataInicio, dataFim, funcionarios, usuario);
+						
+			response.setContentType("application/pdf"); //tipo de arquivo..
+			response.addHeader("Content-Disposition", "attachment; filename=funcionarios.pdf");
+			
+			//DOWNLOAD..
+			byte[] dados = stream.readAllBytes(); //dados do arquivo
+			
+			OutputStream out = response.getOutputStream();
+			out.write(dados, 0, dados.length);
+			out.flush();
+			out.close();
+			
+			response.getOutputStream().flush();
+			
+			return null;
+		}
+		catch(Exception e) {
+			modelAndView.addObject("mensagem_erro", "Ocorreu um erro: " + e.getMessage());
+		}
 		
 		return modelAndView;
 	}

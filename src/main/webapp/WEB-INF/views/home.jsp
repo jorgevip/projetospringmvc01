@@ -1,16 +1,16 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <html>
-<!-- Marca o inicio da pagina  -->
 <head>
-<!-- cabeçalho da pagina e  -->
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Home</title>
 
-<!-- referência para arquivos css -->
+<!-- Referencia para arquivos CSS -->
 <link rel="stylesheet" href="resources/css/bootstrap.min.css" />
 
 </head>
 <body>
+
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#">Controle de Funcionários</a>
@@ -23,17 +23,18 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" href="#">Página Inicial</a></li>
-					<li class="nav-item dropdown"><a
-						class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+						aria-current="page" href="/projetoSpringMVC01/home">Página inicial</a></li>
+					<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
 						role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							Gerenciar Funcionários </a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+							Gerenciar Funcionários 
+					</a>
+					<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 							<li><a class="dropdown-item" href="/projetoSpringMVC01/funcionario-cadastro">Cadastrar Funcionários</a></li>
 							<li><a class="dropdown-item" href="/projetoSpringMVC01/funcionario-consulta">Consultar Funcionários</a></li>
 							<li><hr class="dropdown-divider"></li>
 							<li><a class="dropdown-item" href="/projetoSpringMVC01/funcionario-relatorio">Relatório de Funcionários</a></li>
-						</ul></li>
+					</ul></li>
 				</ul>
 				<form class="d-flex">
 					<span class="text-white mt-3" style="margin-right: 20px;">
@@ -44,26 +45,81 @@
 						Sair do Sistema
 					</a>
 				</form>
-				
-				
 			</div>
 		</div>
 	</nav>
 	
-	<div class="nav-scrooler bg-body shadow-sm">
+	<div class="nav-scroller bg-body shadow-sm">
 		<nav class="nav nav-underline">
 			<p class="mt-3 ml-4">
-				<a>
-				&nbsp;&nbsp;&nbsp;&nbsp;Sistema Desenvolvido em Spring MVC com Spring JDBC, Bootstrap e JQuery
-				</a>
+				&nbsp;&nbsp;&nbsp;Sistema desenvolvido em Spring MVC com Spring JDBC, Bootstrap e JQuery
 			</p>
-		</nav>	
-	</div>	
-	
-	<div class="container mt-4">
-		<h3>Seja Bem Vindo ao Projeto!</h3>
-	</div>	
-	<!-- referência para arquivos css -->
+		</nav>
+	</div>
+
+	<div class="container mt-4">	
+		<div id="grafico"></div>		
+	</div>
+
+	<!-- Referencia para arquivos JS -->
 	<script src="resources/js/bootstrap.min.js"></script>
+	
+	<!-- Referencia do JQuery -->
+	<script src="resources/js/jquery-3.6.0.min.js"></script>	
+
+	<!-- Referencia dos arquivos do Highcharts -->
+	<script src="resources/js/highcharts.js"></script>
+	<script src="resources/js/highcharts-3d.js"></script>
+	<script src="resources/js/exporting.js"></script>
+	<script src="resources/js/export-data.js"></script>
+	
+	<script>
+		$(document).ready(function(){
+			
+			var dados = [
+				{ data : [${qtd_admitido}], name : 'Funcionários Admitidos' },
+				{ data : [${qtd_afastado}], name : 'Funcionários Afastados' },
+				{ data : [${qtd_ferias}], name : 'Funcionários de Férias' },
+				{ data : [${qtd_demitido}], name : 'Funcionários Demitidos' },
+				{ data : [${qtd_falecido}], name : 'Funcionários Falecidos' },
+				{ data : [${qtd_pinel}], name : 'Funcionários Pinel' },
+				{ data : [${qtd_aposentado}], name : 'Funcionários Aposentados' }
+			];
+			
+			var array = [];
+			for(var i = 0; i < dados.length; i++){
+				array.push([ dados[i].name, dados[i].data[0] ]);
+			}
+			
+			new Highcharts.Chart({
+				chart : {
+					type : 'pie',
+					renderTo : 'grafico'
+				},
+				title : {
+					text : 'Gráfico de Funcionários por Situação.'
+				},
+				subtitle : {
+					text : 'Total de funcionários por situação cadastrada.'
+				},
+				exporting : { enabled : false },
+				credits : { enabled : false },
+				plotOptions : {
+					pie : {
+						innerSize: '60%'
+					}
+				},
+				series : [
+					{ data : array }
+				]
+			})
+		})
+	</script>
+
 </body>
 </html>
+
+
+
+
+

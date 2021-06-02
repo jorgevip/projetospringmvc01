@@ -92,7 +92,7 @@
 		<h5>Relatório de funcionários</h5>
 		<hr/>
 		
-		<form id="formrelatorio">
+		<form id="formrelatorio" method="post" action="gerarRelatorioFuncionarios">
 		
 			<label>Relatório de funcionários por período de admissão:</label>
 		
